@@ -1,4 +1,5 @@
 import UserModel from "../model/User.js";
+import Bcrypt from "bcrypt";
 
 export const userAll = async (req, res) => {
     try {
@@ -22,7 +23,8 @@ export const userDetails = async (req, res) => {
 
 export const userCreate = async (req, res) => {
 
-    const { userName, email, address, password } = req.body;
+    let { userName, email, address, password } = req.body;
+    password = Bcrypt.hashSync(password, 10);
     
     const userModel = new UserModel({
         userName: userName,
@@ -51,7 +53,7 @@ export const userUpdate = async (req, res) => {
             
         },{new:true}
         );
-        res.send(updateUser);
+        res.send({updateUser, message:"user updated successfully", statusCode:200});
     }
     catch (error) {
         res.json({ message: error });
@@ -62,7 +64,7 @@ export const userDelete = async (req, res) => {
     try {
         const _id = req.params.id;
         const removeUser = await UserModel.findByIdAndDelete(_id);
-        res.send(removeUser);
+        res.json({message:"User Deleted successfully"});
     }
     catch (error) {
         res.json({ message: error });
@@ -71,17 +73,16 @@ export const userDelete = async (req, res) => {
 
 export const userLogin = async (req, res) => {
     try {
-
-        const user = await UserModel.find({ $and: [{ email: req.body.email }, { password: req.body.password }] });
-        if (user) {
-            res.send("successfull login");
-        }
-        else {
-            throw new error("error");
-        }
-        // res.json(user);
+      const email = req.body.email;
+      let password = req.body.password;
+      const userEmail = await UserModel.findOne({ email: email });
+      if (Bcrypt.compareSync(password, userEmail.password)) {
+        res.status(201).json({ message: "User login successfully" });
+      } else {
+        res.json({ message: "Invalid login details" });
+      }
+      // res.json(product);
+    } catch (error) {
+      res.status(400).json({ message: "User not found" });
     }
-    catch (error) {
-        res.json({ message: error });
-    }
-};
+  };
