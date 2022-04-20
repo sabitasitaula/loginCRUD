@@ -43,22 +43,29 @@ export const userCreate = async (req, res) => {
 };
 
 export const userUpdate = async (req, res) => {
-    try {
-        const updateUser = await UserModel.findByIdAndUpdate(req.params.id ,
-            {
-            name: req.body.name,
-            email: req.body.email,
-            contactNumber: req.body.contactNumber,
-            address: req.body.address,
-            
-        },{new:true}
-        );
-        res.send({updateUser, message:"user updated successfully", statusCode:200});
-    }
-    catch (error) {
-        res.json({ message: error });
-    }
+  try {
+    let { userName, email, address, password } = req.body;
+    password = Bcrypt.hashSync(password, 10);
+    const user = {
+      userName: userName,
+      email: email,
+      address: address,
+      password: password,
+    };
+    const updateUser = await UserModel.findByIdAndUpdate(
+      { _id: req.params.id },
+      user
+    );
+    res.json({
+      user,
+      message: "Data Updated Successfully",
+      statusCode: 200,
+    });
+  } catch (error) {
+    res.json({ message: error });
+  }
 };
+
 
 export const userDelete = async (req, res) => {
     try {
