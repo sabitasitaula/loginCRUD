@@ -8,7 +8,13 @@ useRouter.get('/', userAll);
 useRouter.get('/:id', userDetails);
 useRouter.patch('/:id', userUpdate);
 useRouter.delete('/:id', userDelete);
-useRouter.get('/login', userLogin);
+useRouter.post('/login', userLogin);
 
+
+// useRouter.route("/").post(userCreate).get(userAll);
+
+// useRouter.route("/:id").get(userDetails).patch(userUpdate).delete(userDelete);
+
+// useRouter.post("/login", userLogin);
 
 export default useRouter;
