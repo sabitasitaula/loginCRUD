@@ -21,7 +21,7 @@ const ContactModel = mongoose.model(
       },
       message: {
         type: String,
-        required: [true, "Please add an address"],
+        required: [true, "Please add a message"],
         trim: true,
       },
       
