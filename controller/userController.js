@@ -1,45 +1,45 @@
 import UserModel from "../model/User.js";
 import Bcrypt from "bcrypt";
+import { generateAccessToken, generateRefreshToken } from "../utils/generateToken.js";
 
 export const userAll = async (req, res) => {
-    try {
-        const users = await UserModel.find();
-        res.json(users);
-    }
-    catch (error) {
-        res.json({ message: error });
-    }
+  try {
+    const users = await UserModel.find();
+    res.json(users);
+  } catch (error) {
+    res.json({ message: error });
+  }
 };
 
 export const userDetails = async (req, res) => {
-    try {
-        const user = await UserModel.findById(req.params.id);
-        res.json(user);
-    }
-    catch (error) {
-        res.json({ message: error });
-    }
+  try {
+    const user = await UserModel.findById(req.params.id);
+    res.json(user);
+  } catch (error) {
+    res.json({ message: error });
+  }
 };
 
 export const userCreate = async (req, res) => {
+  let { userName, email, address, password } = req.body;
+  password = Bcrypt.hashSync(password, 10);
 
-    let { userName, email, address, password } = req.body;
-    password = Bcrypt.hashSync(password, 10);
-    
-    const userModel = new UserModel({
-        userName: userName,
-        email: email,
-        address: address,
-        password: password
+  const userModel = new UserModel({
+    userName: userName,
+    email: email,
+    address: address,
+    password: password,
+  });
+  try {
+    const savedUser = await userModel.save();
+    res.send({
+      savedUser,
+      message: "user created successfully",
+      statusCode: 200,
     });
-    try {
-        const savedUser = await userModel.save();
-        res.send({savedUser, message:"user created successfully", statusCode:200});
-    }
-    catch (error) {
-        res.json( error);
-    }
-   
+  } catch (error) {
+    res.json(error);
+  }
 };
 
 export const userUpdate = async (req, res) => {
@@ -66,30 +66,35 @@ export const userUpdate = async (req, res) => {
   }
 };
 
-
 export const userDelete = async (req, res) => {
-    try {
-        const _id = req.params.id;
-        const removeUser = await UserModel.findByIdAndDelete(_id);
-        res.json({message:"User Deleted successfully"});
-    }
-    catch (error) {
-        res.json({ message: error });
-    }
+  try {
+    const _id = req.params.id;
+    const removeUser = await UserModel.findByIdAndDelete(_id);
+    res.json({ message: "User Deleted successfully" });
+  } catch (error) {
+    res.json({ message: error });
+  }
 };
 
 export const userLogin = async (req, res) => {
-    try {
-      const email = req.body.email;
-      let password = req.body.password;
-      const userEmail = await UserModel.findOne({ email: email });
-      if (Bcrypt.compareSync(password, userEmail.password)) {
-        res.status(201).json({ message: "User login successfully" });
-      } else {
-        res.json({ message: "Invalid login details" });
-      }
-      // res.json(product);
-    } catch (error) {
-      res.status(400).json({ message: "User not found" });
+  try {
+    const email = req.body.email;
+    let password = req.body.password;
+    const userData = await UserModel.findOne({ email: email });
+    
+    if (Bcrypt.compareSync(password, userData.password)) {
+      const accessToken = generateAccessToken({
+        name: userData.userName,
+        email: userData.email
+      });
+      console.log(accessToken);
+      // const refreshToken=generateRefreshToken(userData);
+      res.status(201).json({ accessToken});
+    } else {
+      res.json({ message: "Invalid login details" });
     }
-  };
+    // res.json(product);
+  } catch (error) {
+    res.status(400).json({ message: "User not found",error:error });
+  }
+};

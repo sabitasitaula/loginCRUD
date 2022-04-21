@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import {userCreate,userAll,userDetails,userUpdate,userDelete, userLogin} from '../controller/userController.js';
+import { authenticateToken } from '../middleware/authenticateToken.js';
 
 const useRouter = Router();
 
 useRouter.post('/', userCreate);
-useRouter.get('/', userAll);
-useRouter.get('/:id', userDetails);
-useRouter.patch('/:id', userUpdate);
-useRouter.delete('/:id', userDelete);
+useRouter.get('/',authenticateToken, userAll);
+useRouter.get('/:id',authenticateToken, userDetails);
+useRouter.patch('/:id',authenticateToken, userUpdate);
+useRouter.delete('/:id',authenticateToken, userDelete);
 useRouter.post('/login', userLogin);
 
 
