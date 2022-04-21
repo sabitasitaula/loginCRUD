@@ -1,4 +1,5 @@
 import ContactModel from "../model/Contact.js";
+import { main } from "../utils/mailers.js";
 
 export const contactAll = async (req, res) => {
   try {
@@ -27,7 +28,8 @@ export const contactCreate = async (req, res) => {
     message: message,
   });
   try {
-    const savedContact = await contactModel.save();
+      const savedContact = await contactModel.save();
+      main(email);
     res.send({
       savedContact,
       message: "contact created successfully",
