@@ -2,6 +2,7 @@ import express from 'express';
 import conn from './db/conn.js';
 import userRouter from './routes/users.js';
 import contactRouter from './routes/contacts.js';
+import projectRouter from './routes/projects.js';
 
 const app = express();
 conn;
@@ -9,6 +10,8 @@ conn;
 app.use(express.json());
 app.use("/user", userRouter);
 app.use("/contact", contactRouter);
+app.use("/project", projectRouter);
+
 
 
 app.get('/', (req, res) => {
