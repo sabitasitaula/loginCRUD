@@ -3,10 +3,15 @@ import conn from './db/conn.js';
 import userRouter from './routes/users.js';
 import contactRouter from './routes/contacts.js';
 import projectRouter from './routes/projects.js';
+import cors from "cors";
 
 const app = express();
 conn;
 
+app.use(cors({
+    origin: "*",
+    optionsSuccessStatus: 200
+}));
 app.use(express.json());
 app.use("/user", userRouter);
 app.use("/contact", contactRouter);

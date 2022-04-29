@@ -4,7 +4,7 @@ import {projectCreate,projectAll, projectList} from '../controller/projectContro
 const useRouter = Router();
 
 useRouter.get('/',projectCreate);
-useRouter.get('/', projectAll);
+// useRouter.get('/', projectAll);
 useRouter.get('/:size', projectList);
 
 

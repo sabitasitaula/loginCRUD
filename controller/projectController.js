@@ -12,7 +12,7 @@ export const projectAll = async (req, res) => {
 
 export const projectCreate = (req, res) => {
   axios
-    .get("https://api.github.com/users/sabitasitaula/repos?per_page=6")
+    .get("https://api.github.com/users/sabitasitaula/repos")
     .then((res) => {
       const { data } = res;
       //   console.log(data);

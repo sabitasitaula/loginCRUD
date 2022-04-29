@@ -14,9 +14,12 @@ export async function main(mailTo) {
   let info = await transporter.sendMail({
     from: "sabitasitaula705@gmail.com", 
     to: mailTo, 
-    subject: "Hello ✔",
-    text: "Hello world?",
-    html: "<b>Hello world?</b>", 
+    subject: "Thanks for your response",
+    html: `<h2 >Hello!</h2>
+    <br>Thank you for submitting the form. Your information is recorded. I will get to you soon.
+    <br><br>
+    <span>Sincerely</span>,<br>
+    <h3>Sabita` 
   });
 
   console.log("Message sent: %s", info.messageId);
