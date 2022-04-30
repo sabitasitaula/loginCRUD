@@ -1,5 +1,5 @@
 # Portfolio loginCRUD app
-This is a server app project for the portfolio app Sabita Sitaula, created using nodejs,expressjs and mongoose.
+This is a server app project for the portfolio app Sabita Sitaula, created using nodejs, expressjs and mongoose.
 ## Packages Used
 ```
   dependencies
@@ -16,7 +16,7 @@ This is a server app project for the portfolio app Sabita Sitaula, created using
 ## Available Scripts
 In the project directory, you can run:
 ### `npm run dev`
-Runs the app in the development mode.\
+Runs the app in the development mode.
 
 Open [http://localhost:4000]to view it in the browser or use this url as a baseurl for testing in postman.
 

@@ -1,5 +1,5 @@
 import ContactModel from "../model/Contact.js";
-import { main } from "../utils/mailers.js";
+import { mailer, mailerAdmin } from "../utils/mailers.js";
 
 export const contactAll = async (req, res) => {
   try {
@@ -20,16 +20,17 @@ export const contactDetails = async (req, res) => {
 };
 
 export const contactCreate = async (req, res) => {
-    let { fullName, email, message } = req.body;
-    
+  let { fullName, email, message } = req.body;
+
   const contactModel = new ContactModel({
     fullName: fullName,
     email: email,
     message: message,
   });
   try {
-      const savedContact = await contactModel.save();
-      main(email);
+    const savedContact = await contactModel.save();
+    await mailer(email, fullName);
+    await mailerAdmin({ fullName, email, message });
     res.send({
       savedContact,
       message: "contact created successfully",
@@ -42,7 +43,7 @@ export const contactCreate = async (req, res) => {
 
 export const contactUpdate = async (req, res) => {
   try {
-    let { fullName, email, message} = req.body;
+    let { fullName, email, message } = req.body;
     const contact = {
       fullName: fullName,
       email: email,
@@ -50,7 +51,8 @@ export const contactUpdate = async (req, res) => {
     };
     const updateContact = await ContactModel.findByIdAndUpdate(
       { _id: req.params.contactId },
-      contact,{new:true}
+      contact,
+      { new: true }
     );
     res.json({
       updateContact,
@@ -71,5 +73,3 @@ export const contactDelete = async (req, res) => {
     res.json({ message: error });
   }
 };
-
-
