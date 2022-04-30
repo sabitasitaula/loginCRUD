@@ -1,8 +1,6 @@
 # Portfolio loginCRUD app
 This is a server app project for the portfolio app Sabita Sitaula, created using nodejs, expressjs and mongoose.
 ## Packages Used
-```
-  dependencies
     *axios
     *bcrypt
     *cors
@@ -12,7 +10,6 @@ This is a server app project for the portfolio app Sabita Sitaula, created using
     *mongoose
     *nodemailer
     *nodemon  
-```
 ## Available Scripts
 In the project directory, you can run:
 ### `npm run dev`
